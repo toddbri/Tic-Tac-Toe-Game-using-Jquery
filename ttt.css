@@ -1,31 +1,35 @@
-.body {margin:0;padding:0;font-family: 'Didact Gothic', sans-serif;}
-.container {height:660px;width:600px;background-color: black}
-.footer {height:60px;width:100%;background-color: #136322;color:white;
-  font-family: 'Didact Gothic';}
-.banner {text-align: center;height:30px;background-color: yellow;
-      font-family: 'Didact Gothic', sans-serif;font-size: 1.5em;
-      font-weight: bold;position:relative;;
+* {font-family: 'Didact Gothic', sans-serif;}
+
+.outer {text-align: center;}
+.container {height:660px;width:600px;background-color: white;display: inline-block;}
+.container {height:660px;width:50%;background-color: white;display: inline-block;}
+.footer {height:60px;width:100%;background-color: #fff;color:black;}
+.banner {text-align: center;height:30px;background-color: white;
+      font-size: 1.5em;font-weight: bold;position:relative;;
       }
-.gameboard {height:600px;width:600px;position: relative;}
-.cell {height:32%;width:32%;background-color: #b8f1c1;float: left;
+.gameboard {height:600px;width:100%;position: relative;}
+.cell {height:32%;width:32%;background-color: #b8eff1;float: left;
       margin:.66666%;justify-content: center;
-      font-size: 10em;
+      font-size: 10rem;
       display:flex;
       align-items: center;
-      font-family: 'Didact Gothic', sans-serif;
+      font-family: 'Cabin Sketch';
       }
-.ai {width:600px;height:50px;color:red;font-size: 1.5em;
-    display: flex;align-items: center;background-color: #136322;font-family: 'Didact Gothic', sans-serif;
-      }
+/*.ai {width:600px;height:50px;color:red;font-size: 1.5em;text-align: right;
+    ;background-color: #fff;
+      }*/
 .newrow {float:left;clear:left;}
-.status {width: 70%;float:left;height:100%;
-        display:flex;align-items: center;
+
+.status {width: 100%;height:100%;
+        display:none;
         padding-left: 15px;
         font-size:2.0em;
-
+        clear:left;
         }
-.start {height:100%;width: 20%;float:right;
-  display:flex;align-items: center;color:red;font-size: 1.5em;}
+.start {height:100%;width: 100%;color:red;font-size: 1.5em;}
+
+.left {float:left;width:45%;text-align: left}
+.right{float:right;width:45%;text-align: right}
 
 #hr1 {background-color: red;height:7px;width:70%;position:absolute;
     top:17%;left:15%;display:none}

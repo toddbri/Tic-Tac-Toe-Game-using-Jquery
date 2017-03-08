@@ -14,7 +14,6 @@ function setUp(){
   movesLeft=9;
   currentMoves=blankBoard.slice();
   currentPlayer= (Math.random() > 0.5 ) ? 2 : 1;
-  currentPlayer = 2;
   $('.cell').html("");
   $('.start').css('display','none');
   $('.status').css('display','block');
@@ -121,6 +120,17 @@ function fourthMove(){
     if (currentMoves[1]===-1 && currentMoves[3]===-1){return 0;}
     if (currentMoves[3]===-1 && currentMoves[7]===-1){return 6;}
     if (currentMoves[5]===-1 && currentMoves[7]===-1){return 8;}
+      if (currentMoves[1]===-1 && currentMoves[8]===-1){return 2;}
+      if (currentMoves[1]===-1 && currentMoves[6]===-1){return 0;}
+
+      if (currentMoves[3]===-1 && currentMoves[2]===-1){return 0;}
+      if (currentMoves[3]===-1 && currentMoves[8]===-1){return 6;}
+      
+      if (currentMoves[7]===-1 && currentMoves[0]===-1){return 6;}
+      if (currentMoves[7]===-1 && currentMoves[2]===-1){return 8;}
+
+      if (currentMoves[5]===-1 && currentMoves[0]===-1){return 2;}
+      if (currentMoves[5]===-1 && currentMoves[6]===-1){return 8;}
   }
   if (currentMoves[0]===1 && currentMoves[4]===-1 && currentMoves[8]===-1){return 6;}
   console.log("I wasn't expecting this scenario");

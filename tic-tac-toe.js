@@ -66,7 +66,8 @@ function chooser(){
     sundry = canILose();  //check to see if other player has a winning move
     if (sundry >=0 ){return sundry;}
     if (taken===3){return fourthMove();}
-
+    if (taken === 4){return fifthMove();}
+    if (taken === 5) {return sixthMove();}
     return chooseSomething();
 }
 function movesCount(){
@@ -125,7 +126,7 @@ function fourthMove(){
 
       if (currentMoves[3]===-1 && currentMoves[2]===-1){return 0;}
       if (currentMoves[3]===-1 && currentMoves[8]===-1){return 6;}
-      
+
       if (currentMoves[7]===-1 && currentMoves[0]===-1){return 6;}
       if (currentMoves[7]===-1 && currentMoves[2]===-1){return 8;}
 
@@ -136,7 +137,38 @@ function fourthMove(){
   console.log("I wasn't expecting this scenario");
   return -1;
 
-}
+} //end of fourth move
+
+function fifthMove(){
+  if (currentMoves[1]===-1 && currentMoves[8]===-1){return 2;}
+  if (currentMoves[1]===-1 && currentMoves[6]===-1){return 0;}
+
+  if (currentMoves[3]===-1 && currentMoves[2]===-1){return 0;}
+  if (currentMoves[3]===-1 && currentMoves[8]===-1){return 6;}
+
+  if (currentMoves[7]===-1 && currentMoves[0]===-1){return 6;}
+  if (currentMoves[7]===-1 && currentMoves[2]===-1){return 8;}
+
+  if (currentMoves[5]===-1 && currentMoves[0]===-1){return 2;}
+  if (currentMoves[5]===-1 && currentMoves[6]===-1){return 8;}
+
+
+} //end of fifth Move
+
+function sixthMove(){
+  var row0 = currentMoves[0] + currentMoves[1]+ currentMoves[2];
+  var row2 = currentMoves[6] + currentMoves[7]+ currentMoves[8];
+  var col0 = currentMoves[0] + currentMoves[3]+ currentMoves[6];
+  var col2 = currentMoves[2] + currentMoves[5]+ currentMoves[8];
+
+  if (row0===-1 && col0===-1 && currentMoves[0]===0){return 0;}
+  if (row0===-1 && col2===-1 && currentMoves[2]===0){return 2;}
+
+  if (row2===-1 && col0===-1 && currentMoves[6]===0){return 6;}
+  if (row2===-1 && col2===-1 && currentMoves[8]===0){return 8;}
+  return chooseSomething();
+
+} //end of sixth Move
 
 function chooseSomething(){
   console.log(currentMoves);
@@ -150,18 +182,21 @@ function chooseSomething(){
 }
 
 function makeMove(){
-  if ((currentPlayer===2 && ai==2) | ai===0){
-      if (movesLeft>0){
-        var cellnum = parseInt($(this).attr('id'));
-        var symbol = symbolLookup[currentPlayer];
+  if ((currentPlayer===2 && ai===2)|ai===0){
+    if (movesLeft>0){
+      var cellnum = parseInt($(this).attr('id'));
+      var symbol = symbolLookup[currentPlayer];
+        console.log("cellnum: " + cellnum);
+        console.log(currentMoves[cellnum]);
         if (currentMoves[cellnum]===0){
           $(this).html(symbol);
           currentMoves[cellnum]= (symbol ==="X"? 1:-1);
+          processSelection();
+
         }
-    processSelection();
 
     }
-    }
+  }
 }
 
 function processSelection(){

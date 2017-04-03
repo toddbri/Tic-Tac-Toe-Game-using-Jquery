@@ -1,7 +1,7 @@
 var blankBoard = [0,0,0,0,0,0,0,0,0]; //player 1 = 1 , player 2 = -1
 var symbolLookup = {1:"X",2:"O"};
 var statusLookup = {1:"Player 1's turn (X)",2:"Player 2's turn (O)",3:"My turn (X), thinking",4:"Your turn (O)"};
-var currentMoves = blankBoard.slice();
+var pastMoves = blankBoard.slice();
 var possibilities = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
 var currentPlayer;
 var movesLeft = 9;
@@ -12,7 +12,7 @@ var timer;
 
 function setUp(){
   movesLeft=9;
-  currentMoves=blankBoard.slice();
+  pastMoves=blankBoard.slice();
   currentPlayer= (Math.random() > 0.5 ) ? 2 : 1;
   $('.cell').html("");
   $('.start').css('display','none');
@@ -47,7 +47,7 @@ function aimode(){
 
 function computerTurn(){
   choice = chooser();
-  currentMoves[choice]=1;
+  pastMoves[choice]=1;
   $('.cell:nth-child(' + (choice + 1) + ')').html("X");
   processSelection();
 }
@@ -55,9 +55,9 @@ function computerTurn(){
 function chooser(){
     var taken = movesCount();
     console.log("in chooser:");
-    console.log("taken: " + taken + " , currentMoves: " + currentMoves);
-    if ((taken === 0 | taken ===1) && currentMoves[4]===0){return 4;} //if this is 1st or the second move and center cell is open, take it.
-    if (taken ===1 && currentMoves[4]===-1){return 0;}
+    console.log("taken: " + taken + " , pastMoves: " + pastMoves);
+    if ((taken <2) && pastMoves[4]===0){return 4;} //if this is 1st or the second move and center cell is open, take it.
+    if (taken ===1 && pastMoves[4]===-1){return 0;}
     if (taken===2){return thirdMove();}
 
     sundry = canIWin(); //check to see if I have a winning move
@@ -71,17 +71,17 @@ function chooser(){
     return chooseSomething();
 }
 function movesCount(){
-  return currentMoves.reduce(function(accum,element){return accum + (element ===0? 0:1);},0);
+  return pastMoves.reduce(function(accum,element){return accum + (element ===0? 0:1);},0);
 
 }
 function canIWin(){
   console.log("starting can I win");
     for (var j in possibilities){
-      var lineSum = possibilities[j].reduce(function(accum,element){return accum + currentMoves[element];},0);
+      var lineSum = possibilities[j].reduce(function(accum,element){return accum + pastMoves[element];},0);
       console.log("line: " + lineSum + " for " + possibilities[j]);
       if (lineSum >1){
         for (var x in possibilities[j]){
-          if (currentMoves[possibilities[j][x]]===0){return possibilities[j][x];};
+          if (pastMoves[possibilities[j][x]]===0){return possibilities[j][x];};
         }
       }
     }
@@ -89,10 +89,10 @@ function canIWin(){
 }
 function canILose(){
     for (var j in possibilities){
-      var lineSum = possibilities[j].reduce(function(accum,element){return accum + currentMoves[element];},0);
+      var lineSum = possibilities[j].reduce(function(accum,element){return accum + pastMoves[element];},0);
       if (lineSum <-1){
         for (var x in possibilities[j]){
-          if (currentMoves[possibilities[j][x]]===0){return possibilities[j][x];};
+          if (pastMoves[possibilities[j][x]]===0){return possibilities[j][x];};
         }
       }
     }
@@ -101,78 +101,78 @@ function canILose(){
 
 function thirdMove(){
   console.log("third move");
-  if (currentMoves[0]===-1){return 3;}
-  if (currentMoves[1]===-1){return 0;}
-  if (currentMoves[2]===-1){return 1;}
-  if (currentMoves[3]===-1){return 0;}
-  if (currentMoves[5]===-1){return 8;}
-  if (currentMoves[6]===-1){return 7;}
-  if (currentMoves[7]===-1){return 8;}
+  if (pastMoves[0]===-1){return 3;}
+  if (pastMoves[1]===-1){return 0;}
+  if (pastMoves[2]===-1){return 1;}
+  if (pastMoves[3]===-1){return 0;}
+  if (pastMoves[5]===-1){return 8;}
+  if (pastMoves[6]===-1){return 7;}
+  if (pastMoves[7]===-1){return 8;}
   return 5;
 
 }
 function fourthMove(){
-  if (currentMoves[4]===1){
-    if (currentMoves[0]===-1 && currentMoves[8]===-1){return 5;}
-    if (currentMoves[2]===-1 && currentMoves[6]===-1){return 5;}
-    if (currentMoves[1]===-1 && currentMoves[7]===-1){return 5;}
-    if (currentMoves[3]===-1 && currentMoves[5]===-1){return 1;}
-    if (currentMoves[1]===-1 && currentMoves[5]===-1){return 2;}
-    if (currentMoves[1]===-1 && currentMoves[3]===-1){return 0;}
-    if (currentMoves[3]===-1 && currentMoves[7]===-1){return 6;}
-    if (currentMoves[5]===-1 && currentMoves[7]===-1){return 8;}
-      if (currentMoves[1]===-1 && currentMoves[8]===-1){return 2;}
-      if (currentMoves[1]===-1 && currentMoves[6]===-1){return 0;}
+  if (pastMoves[4]===1){
+    if (pastMoves[0]===-1 && pastMoves[8]===-1){return 5;}
+    if (pastMoves[2]===-1 && pastMoves[6]===-1){return 5;}
+    if (pastMoves[1]===-1 && pastMoves[7]===-1){return 5;}
+    if (pastMoves[3]===-1 && pastMoves[5]===-1){return 1;}
+    if (pastMoves[1]===-1 && pastMoves[5]===-1){return 2;}
+    if (pastMoves[1]===-1 && pastMoves[3]===-1){return 0;}
+    if (pastMoves[3]===-1 && pastMoves[7]===-1){return 6;}
+    if (pastMoves[5]===-1 && pastMoves[7]===-1){return 8;}
+      if (pastMoves[1]===-1 && pastMoves[8]===-1){return 2;}
+      if (pastMoves[1]===-1 && pastMoves[6]===-1){return 0;}
 
-      if (currentMoves[3]===-1 && currentMoves[2]===-1){return 0;}
-      if (currentMoves[3]===-1 && currentMoves[8]===-1){return 6;}
+      if (pastMoves[3]===-1 && pastMoves[2]===-1){return 0;}
+      if (pastMoves[3]===-1 && pastMoves[8]===-1){return 6;}
 
-      if (currentMoves[7]===-1 && currentMoves[0]===-1){return 6;}
-      if (currentMoves[7]===-1 && currentMoves[2]===-1){return 8;}
+      if (pastMoves[7]===-1 && pastMoves[0]===-1){return 6;}
+      if (pastMoves[7]===-1 && pastMoves[2]===-1){return 8;}
 
-      if (currentMoves[5]===-1 && currentMoves[0]===-1){return 2;}
-      if (currentMoves[5]===-1 && currentMoves[6]===-1){return 8;}
+      if (pastMoves[5]===-1 && pastMoves[0]===-1){return 2;}
+      if (pastMoves[5]===-1 && pastMoves[6]===-1){return 8;}
   }
-  if (currentMoves[0]===1 && currentMoves[4]===-1 && currentMoves[8]===-1){return 6;}
+  if (pastMoves[0]===1 && pastMoves[4]===-1 && pastMoves[8]===-1){return 6;}
   console.log("I wasn't expecting this scenario");
   return -1;
 
 } //end of fourth move
 
 function fifthMove(){
-  if (currentMoves[1]===-1 && currentMoves[8]===-1){return 2;}
-  if (currentMoves[1]===-1 && currentMoves[6]===-1){return 0;}
+  if (pastMoves[1]===-1 && pastMoves[8]===-1){return 2;}
+  if (pastMoves[1]===-1 && pastMoves[6]===-1){return 0;}
 
-  if (currentMoves[3]===-1 && currentMoves[2]===-1){return 0;}
-  if (currentMoves[3]===-1 && currentMoves[8]===-1){return 6;}
+  if (pastMoves[3]===-1 && pastMoves[2]===-1){return 0;}
+  if (pastMoves[3]===-1 && pastMoves[8]===-1){return 6;}
 
-  if (currentMoves[7]===-1 && currentMoves[0]===-1){return 6;}
-  if (currentMoves[7]===-1 && currentMoves[2]===-1){return 8;}
+  if (pastMoves[7]===-1 && pastMoves[0]===-1){return 6;}
+  if (pastMoves[7]===-1 && pastMoves[2]===-1){return 8;}
 
-  if (currentMoves[5]===-1 && currentMoves[0]===-1){return 2;}
-  if (currentMoves[5]===-1 && currentMoves[6]===-1){return 8;}
+  if (pastMoves[5]===-1 && pastMoves[0]===-1){return 2;}
+  if (pastMoves[5]===-1 && pastMoves[6]===-1){return 8;}
 
 
 } //end of fifth Move
 
 function sixthMove(){
-  var row0 = currentMoves[0] + currentMoves[1]+ currentMoves[2];
-  var row2 = currentMoves[6] + currentMoves[7]+ currentMoves[8];
-  var col0 = currentMoves[0] + currentMoves[3]+ currentMoves[6];
-  var col2 = currentMoves[2] + currentMoves[5]+ currentMoves[8];
+  var row0 = pastMoves[0] + pastMoves[1]+ pastMoves[2];
+  var row2 = pastMoves[6] + pastMoves[7]+ pastMoves[8];
+  var col0 = pastMoves[0] + pastMoves[3]+ pastMoves[6];
+  var col2 = pastMoves[2] + pastMoves[5]+ pastMoves[8];
 
-  if (row0===-1 && col0===-1 && currentMoves[0]===0){return 0;}
-  if (row0===-1 && col2===-1 && currentMoves[2]===0){return 2;}
+  if (row0===-1 && col0===-1 && pastMoves[0]===0){return 0;}
+  if (row0===-1 && col2===-1 && pastMoves[2]===0){return 2;}
 
-  if (row2===-1 && col0===-1 && currentMoves[6]===0){return 6;}
-  if (row2===-1 && col2===-1 && currentMoves[8]===0){return 8;}
+  if (row2===-1 && col0===-1 && pastMoves[6]===0){return 6;}
+  if (row2===-1 && col2===-1 && pastMoves[8]===0){return 8;}
   return chooseSomething();
 
 } //end of sixth Move
 
 function chooseSomething(){
-  console.log(currentMoves);
-  var leftovers = currentMoves.map(function(element,index){return element === 0?index:-1;});
+  console.log(pastMoves);
+  var leftovers = pastMoves.map(function(element,index){return element === 0?index:-1;});
   console.log("1: " + leftovers);
   leftovers = leftovers.filter(function(element,index){return (element !=-1);});
   console.log("2: " + leftovers);
@@ -187,10 +187,10 @@ function makeMove(){
       var cellnum = parseInt($(this).attr('id'));
       var symbol = symbolLookup[currentPlayer];
         console.log("cellnum: " + cellnum);
-        console.log(currentMoves[cellnum]);
-        if (currentMoves[cellnum]===0){
+        console.log(pastMoves[cellnum]);
+        if (pastMoves[cellnum]===0){
           $(this).html(symbol);
-          currentMoves[cellnum]= (symbol ==="X"? 1:-1);
+          pastMoves[cellnum]= (symbol ==="X"? 1:-1);
           processSelection();
 
         }
@@ -247,37 +247,37 @@ function enableNewGame (){
 function check4Winner(){
 
   var winner = 0;
-  if (currentMoves[0]!==0 && currentMoves[0]==currentMoves[1] && currentMoves[0]==currentMoves[2]){
-    winner = currentMoves[0];
+  if (pastMoves[0]!==0 && pastMoves[0]==pastMoves[1] && pastMoves[0]==pastMoves[2]){
+    winner = pastMoves[0];
     $('#hr1').css('display','block');
   }
-  if (currentMoves[0]!==0 && currentMoves[0]==currentMoves[4] && currentMoves[0]==currentMoves[8]){
-    winner = currentMoves[0];
+  if (pastMoves[0]!==0 && pastMoves[0]==pastMoves[4] && pastMoves[0]==pastMoves[8]){
+    winner = pastMoves[0];
     $('#hr4').css('display','block');
   }
-  if (currentMoves[0]!==0 && currentMoves[0]==currentMoves[3] && currentMoves[0]==currentMoves[6]){
-    winner = currentMoves[0];
+  if (pastMoves[0]!==0 && pastMoves[0]==pastMoves[3] && pastMoves[0]==pastMoves[6]){
+    winner = pastMoves[0];
     $('#hr5').css('display','block');
   }
 
-  if (currentMoves[3]!==0 && currentMoves[3]==currentMoves[4] && currentMoves[3]==currentMoves[5]){
-    winner = currentMoves[3];
+  if (pastMoves[3]!==0 && pastMoves[3]==pastMoves[4] && pastMoves[3]==pastMoves[5]){
+    winner = pastMoves[3];
     $('#hr2').css('display','block');
   }
-  if (currentMoves[6]!==0 && currentMoves[6]==currentMoves[7] && currentMoves[6]==currentMoves[8]){
-    winner = currentMoves[6];
+  if (pastMoves[6]!==0 && pastMoves[6]==pastMoves[7] && pastMoves[6]==pastMoves[8]){
+    winner = pastMoves[6];
     $('#hr3').css('display','block');
   }
-  if (currentMoves[1]!==0 && currentMoves[1]==currentMoves[4] && currentMoves[1]==currentMoves[7]){
-    winner = currentMoves[1];
+  if (pastMoves[1]!==0 && pastMoves[1]==pastMoves[4] && pastMoves[1]==pastMoves[7]){
+    winner = pastMoves[1];
     $('#hr7').css('display','block');
   }
-  if (currentMoves[2]!==0 && currentMoves[2]==currentMoves[5] && currentMoves[2]==currentMoves[8]){
-    winner = currentMoves[2];
+  if (pastMoves[2]!==0 && pastMoves[2]==pastMoves[5] && pastMoves[2]==pastMoves[8]){
+    winner = pastMoves[2];
     $('#hr8').css('display','block');
   }
-  if (currentMoves[2]!==0 && currentMoves[2]==currentMoves[4] && currentMoves[2]==currentMoves[6]){
-    winner = currentMoves[2];
+  if (pastMoves[2]!==0 && pastMoves[2]==pastMoves[4] && pastMoves[2]==pastMoves[6]){
+    winner = pastMoves[2];
       $('#hr6').css('display','block');
   }
   if (winner === 0){

@@ -10,6 +10,8 @@ var choice;
 var found;
 var timer;
 
+window.onresize = positionStrikeThroughs;
+
 function setUp(){
   movesLeft=9;
   pastMoves=blankBoard.slice();
@@ -19,8 +21,7 @@ function setUp(){
   $('.status').css('display','block');
   $('.status').html(statusLookup[ai + currentPlayer]);
   $('.hr').css('display','none');
-  console.clear();
-  console.log("******************");
+
 }
 
 function start(){
@@ -29,7 +30,6 @@ function start(){
 }
 
 function ticking(){
-  // console.log("ticking");
   if (currentPlayer===1){
 
   $('.status').html($('.status').html()+ ".");
@@ -189,8 +189,9 @@ function makeMove(){
         console.log("cellnum: " + cellnum);
         console.log(pastMoves[cellnum]);
         if (pastMoves[cellnum]===0){
-          $(this).html(symbol);
+          $(this).text(symbol);
           pastMoves[cellnum]= (symbol ==="X"? 1:-1);
+
           processSelection();
 
         }
@@ -250,6 +251,7 @@ function check4Winner(){
   if (pastMoves[0]!==0 && pastMoves[0]==pastMoves[1] && pastMoves[0]==pastMoves[2]){
     winner = pastMoves[0];
     $('#hr1').css('display','block');
+
   }
   if (pastMoves[0]!==0 && pastMoves[0]==pastMoves[4] && pastMoves[0]==pastMoves[8]){
     winner = pastMoves[0];
@@ -280,8 +282,56 @@ function check4Winner(){
     winner = pastMoves[2];
       $('#hr6').css('display','block');
   }
+  positionStrikeThroughs();
   if (winner === 0){
     return 0;
   } else { return winner;}
 
+}
+
+function positionStrikeThroughs(){
+
+  $('#hr1').css({'left': $('#0').width()/2.0 , 'top': $('#0').height()/2.0 - 7});
+  $('#hr1').css({'width': $('#2').offset().left - $('#0').offset().left});
+
+  $('#hr2').css({'left': $('#3').width()/2.0 , 'top': $('#5').position().top + $('#5').height()/2.0 - 7});
+  $('#hr2').css({'width': $('#5').offset().left - $('#3').offset().left});
+
+  $('#hr3').css({'left': $('#6').width()/2.0 , 'top': $('#8').position().top + $('#8').height()/2.0 - 7});
+  $('#hr3').css({'width': $('#8').offset().left - $('#6').offset().left});
+
+  var hr4_delta_x = $('#8').position().left + $('#8').width()/2.0 -  $('#0').width()/2.0 ;
+  var hr4_delta_y = $('#8').position().top + $('#8').height()/2.0 - $('#0').height()/2.0 ;
+  var hr4_length = Math.sqrt(hr4_delta_x*hr4_delta_x + hr4_delta_y*hr4_delta_y);
+  var hr4_left = ($('#5').position().left + $('#5').width() -$('#3').position().left - hr4_length)/2.0;
+  var hr4_angle = Math.atan(hr4_delta_y/hr4_delta_x)*(180/3.1415926);
+
+  $('#hr4').css({'left': hr4_left, 'top': $('#3').position().top + $('#3').height()/2.0 - 3.5});
+  $('#hr4').css({'width': hr4_length});
+  $('#hr4').css({'transform': 'rotate(' + hr4_angle + 'deg)'});
+
+  var hr5_length = $('#6').position().top + $('#6').height()/2.0 -  $('#0').height()/2.0 ;
+  var hr5_left = $('#6').width()/2.0 - hr5_length/2.0 + 3.5;
+  $('#hr5').css({'left': hr5_left, 'top': $('#3').position().top + $('#3').height()/2.0});
+  $('#hr5').css({'width': hr5_length});
+
+  var hr6_delta_x = $('#2').position().left + $('#2').width()/2.0 -  $('#6').width()/2.0 ;
+  var hr6_delta_y = $('#6').position().top + $('#6').height()/2.0 - $('#2').height()/2.0 ;
+  var hr6_length = Math.sqrt(hr6_delta_x*hr6_delta_x + hr6_delta_y*hr6_delta_y);
+  var hr6_left = ($('#5').position().left + $('#5').width() -$('#3').position().left - hr6_length)/2.0 + 3.5;
+  var hr6_angle = 180 - Math.atan(hr4_delta_y/hr4_delta_x)*(180/3.1415926);
+
+  $('#hr6').css({'left': hr6_left, 'top': $('#3').position().top + $('#3').height()/2.0});
+  $('#hr6').css({'width': hr6_length});
+  $('#hr6').css({'transform': 'rotate(' + hr6_angle + 'deg)'});
+
+  var hr7_length = $('#7').position().top + $('#7').height()/2.0 -  $('#1').height()/2.0 ;
+  var hr7_left = $('#4').position().left + $('#4').width()/2.0 - hr7_length/2.0 + 3.5;
+  $('#hr7').css({'left': hr7_left, 'top': $('#3').position().top + $('#3').height()/2.0});
+  $('#hr7').css({'width': hr7_length});
+
+  var hr8_length = $('#8').position().top + $('#8').height()/2.0 -  $('#2').height()/2.0 ;
+  var hr8_left = $('#5').position().left + $('#5').width()/2.0 - hr8_length/2.0 + 3.5;
+  $('#hr8').css({'left': hr8_left, 'top': $('#3').position().top + $('#3').height()/2.0});
+  $('#hr8').css({'width': hr8_length});
 }

@@ -28,8 +28,8 @@
         }
 .start {height:100%;width: 100%;color:red;font-size: 1.5em;}
 
-.left {float:left;width:45%;text-align: left}
-.right{float:right;width:45%;text-align: right}
+.left {float:left;width:45%;text-align: left; cursor: pointer;}
+.right{float:right;width:45%;text-align: right; cursor: pointer;}
 
 #hr1 {background-color: red;height:7px;width:70%;position:absolute;
     top:17%;left:15%;display:none}

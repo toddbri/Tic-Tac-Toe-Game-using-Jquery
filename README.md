@@ -16,4 +16,4 @@ The game has a both a 2-player option and a single-player option to play against
 
 
 ## Challenges
-The biggest challenge was getting the AI portion working make the single-player option unbeatable.
+The biggest challenge was getting the AI portion working to make the single-player option unbeatable.

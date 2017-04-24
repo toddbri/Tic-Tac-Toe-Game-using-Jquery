@@ -1,6 +1,6 @@
 # Tic-Tac-Toe
 ---
-## [Live Demo](http://tic-tac-toe.briley.org)
+## [Live Site](http://tic-tac-toe.briley.org)
 
 ## What It Is
 Classic 2-player strategy game
